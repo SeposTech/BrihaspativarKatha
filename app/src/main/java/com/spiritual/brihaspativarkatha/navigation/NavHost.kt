@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.android.play.core.appupdate.AppUpdateManager
 import com.spiritual.brihaspativarkatha.screen.AartiScreen
 import com.spiritual.brihaspativarkatha.screen.AboutUsScreen
 import com.spiritual.brihaspativarkatha.screen.HomeScreen
@@ -16,12 +17,12 @@ import com.spiritual.brihaspativarkatha.screen.jagdishAartiText
 import com.spiritual.brihaspativarkatha.screen.lakshmiAartiText
 
 @Composable
-fun Navigation() {
+fun Navigation(appUpdateManager: AppUpdateManager) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "Splash") {
         composable(route = "Splash") {
-            SplashScreen(navController = navController)
+            SplashScreen(navController = navController,appUpdateManager)
         }
         composable(route = "Home") {
             HomeScreen(onTopicClick = { topic ->
