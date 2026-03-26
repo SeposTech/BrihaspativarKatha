@@ -24,10 +24,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KathaVidhiScreen(onBack: () -> Unit = {}) {
+    TrackScreenKathVidhi("KathaVidhiScreen")
     var visible by remember { mutableStateOf(false) }
 
     // Animate content on launch
@@ -170,5 +172,12 @@ fun KathaVidhiScreen(onBack: () -> Unit = {}) {
 fun KathaVidhiScreenPreview() {
     MaterialTheme {
         KathaVidhiScreen()
+    }
+}
+
+@Composable
+fun TrackScreenKathVidhi(screenName: String) {
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.trackScreen(screenName)
     }
 }

@@ -24,12 +24,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KathaScreen(onBack: () -> Unit = {}) {
+    TrackScreenKath("KathScreen")
     val context = LocalContext.current
     val activity = context as? Activity
     val scrollState = rememberScrollState()
@@ -210,4 +212,11 @@ private val brihaspativarKatha = """
      
      
  """.trimIndent()
+
+@Composable
+fun TrackScreenKath(screenName: String) {
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.trackScreen(screenName)
+    }
+}
 

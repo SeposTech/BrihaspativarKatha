@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,11 +23,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spiritual.brihaspativarkatha.R
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutUsScreen(onBack: () -> Unit = {}) {
-
+    TrackScreenAboutUs("AboutUsScreen")
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -161,5 +163,12 @@ fun AboutUsScreen(onBack: () -> Unit = {}) {
                 modifier = Modifier.padding(12.dp)
             )
         }
+    }
+}
+
+@Composable
+fun TrackScreenAboutUs(screenName: String) {
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.trackScreen(screenName)
     }
 }

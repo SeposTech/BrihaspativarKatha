@@ -20,11 +20,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KathaMahattvaVidhiScreen(onBack: () -> Unit = {}) {
-
+    TrackScreenKathMahattva("KathaMahattvaVidhiScreen")
     val kathaText = """
         भगवान बृहस्पतिदेव की पूजा-अर्चना के लिए बृहस्पतिवार को व्रत रखकर, बृहस्पतिवार की व्रत कथा को पढ़ने अथवा किसी दूसरे स्त्री-पुरुष द्वारा सुनने की प्राचीन परम्परा रही है। 
         बृहस्पतिवार का व्रत रखने और व्रत-कथा सुनने से स्त्री-पुरुषों की सभी मनोकामनाएं पूरी होती हैं। 
@@ -110,5 +111,12 @@ fun KathaMahattvaVidhiScreen(onBack: () -> Unit = {}) {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun TrackScreenKathMahattva(screenName: String) {
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.trackScreen(screenName)
     }
 }

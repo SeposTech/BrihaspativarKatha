@@ -33,10 +33,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(onTopicClick: (String) -> Unit = {}, navController: NavController) {
+    TrackScreenHome("HomeScreen")
     val topics = listOf(
         "🌼 बृहस्पतिवार व्रत का महत्व",
         "🙏 व्रत विधि",
@@ -223,10 +225,19 @@ fun shareApp(context: Context) {
     context.startActivity(Intent.createChooser(shareIntent, "Share App"))
 }
 
+
+
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     MaterialTheme {
         HomeScreen(navController = rememberNavController())
+    }
+}
+
+@Composable
+fun TrackScreenHome(screenName: String) {
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.trackScreen(screenName)
     }
 }

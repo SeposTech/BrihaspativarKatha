@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "680098438865",
+    "project_id": "brihaspativar-katha",
+    "storage_bucket": "brihaspativar-katha.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680098438865:android:3ee2ec8515926e560c6ff0",
+        "android_client_info": {
+          "package_name": "com.spiritual.brihaspativarkatha"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABtVeM_0Pk4_SoR-krPw9K7gX3LFMhpP4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

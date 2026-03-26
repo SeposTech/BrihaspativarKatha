@@ -21,13 +21,13 @@ import androidx.navigation.NavController
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
 fun SplashScreen(navController: NavController, appUpdateManager: AppUpdateManager) {
-
+    TrackScreen("SplashScreen")
     val context = LocalContext.current
     val activity = context as? Activity
 
@@ -131,5 +131,12 @@ fun SplashScreen(navController: NavController, appUpdateManager: AppUpdateManage
                 modifier = Modifier.alpha(animatedAlpha)
             )
         }
+    }
+}
+
+@Composable
+fun TrackScreen(screenName: String) {
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.trackScreen(screenName)
     }
 }

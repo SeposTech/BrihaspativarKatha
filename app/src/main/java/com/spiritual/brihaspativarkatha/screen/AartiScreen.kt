@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,6 +34,7 @@ fun AartiScreen(
     aartiText: String,
     onBack: () -> Unit = {}
 ) {
+    TrackScreenAarti("AartiScreen - $title")
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
     val scrollState = rememberScrollState()
@@ -164,5 +166,13 @@ fun AartiScreen(
                 }
             }
         }
+    }
+}
+
+
+@Composable
+fun TrackScreenAarti(screenName: String) {
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.trackScreen(screenName)
     }
 }
