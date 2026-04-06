@@ -1,5 +1,6 @@
 package com.spiritual.brihaspativarkatha.screen
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -33,11 +34,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.spiritual.brihaspativarkatha.data.analytics.AdManager
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(onTopicClick: (String) -> Unit = {}, navController: NavController) {
+    val context = LocalContext.current
+    val activity = context as Activity
+
+    LaunchedEffect(Unit) {
+        AdManager.loadAd()
+    }
     TrackScreenHome("HomeScreen")
     val topics = listOf(
         "🌼 बृहस्पतिवार व्रत का महत्व",
