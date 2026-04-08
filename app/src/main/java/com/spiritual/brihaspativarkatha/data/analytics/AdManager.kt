@@ -8,6 +8,7 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.spiritual.brihaspativarkatha.BuildConfig
 
 @SuppressLint("StaticFieldLeak")
 object AdManager {
@@ -25,7 +26,7 @@ object AdManager {
         activity?.let {
             InterstitialAd.load(
                 it,
-                "ca-app-pub-3706611217753944/3346364620",
+                BuildConfig.ADMOB_INTERSTITIAL_ID,
                 adRequest,
                 object : InterstitialAdLoadCallback() {
                     override fun onAdLoaded(ad: InterstitialAd) {

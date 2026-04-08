@@ -16,8 +16,8 @@ android {
         applicationId = "com.spiritual.brihaspativarkatha"
         minSdk = 24
         targetSdk = 36
-        versionCode = 5
-        versionName = "1.4"
+        versionCode = 7
+        versionName = "1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -31,9 +31,21 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            buildConfigField(
+                "String",
+                "ADMOB_INTERSTITIAL_ID",
+                "\"${project.findProperty("ADMOB_INTERSTITIAL_DEBUG")}\""
+            )
+        }
         getByName("release") {
             isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("release")
+            buildConfigField(
+                "String",
+                "ADMOB_INTERSTITIAL_ID",
+                "\"${project.findProperty("ADMOB_INTERSTITIAL_RELEASE")}\""
+            )
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -50,6 +62,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
