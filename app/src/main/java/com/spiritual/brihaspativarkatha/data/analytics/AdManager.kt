@@ -25,7 +25,7 @@ object AdManager {
         activity?.let {
             InterstitialAd.load(
                 it,
-                "ca-app-pub-3940256099942544/1033173712",
+                "ca-app-pub-3706611217753944/3346364620",
                 adRequest,
                 object : InterstitialAdLoadCallback() {
                     override fun onAdLoaded(ad: InterstitialAd) {
