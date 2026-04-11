@@ -50,9 +50,34 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
                             navController.navigate("katha")
                         }
                     }
-                    "🪔 बृहस्पति देव की आरती" -> navController.navigate("बृहस्पति देव की आरती")
-                    "🌸 ओम जय जगदीश हरे आरती" -> navController.navigate("ओम जय जगदीश हरे आरती")
-                    "💰 लक्ष्मी जी की आरती" -> navController.navigate("लक्ष्मी जी की आरती")
+                    "🪔 बृहस्पति देव की आरती" ->
+                        if (AdManager.isAdReady()) {
+                            AdManager.showAd {
+                                navController.navigate("बृहस्पति देव की आरती")
+                            }
+                        } else {
+                            navController.navigate("बृहस्पति देव की आरती")
+                        }
+
+
+                    "🌸 ओम जय जगदीश हरे आरती" ->
+                        if (AdManager.isAdReady()) {
+                            AdManager.showAd {
+                                navController.navigate("ओम जय जगदीश हरे आरती")
+                            }
+                        } else {
+                            navController.navigate("ओम जय जगदीश हरे आरती")
+                        }
+
+
+                    "💰 लक्ष्मी जी की आरती" ->
+                        if (AdManager.isAdReady()) {
+                            AdManager.showAd {
+                                navController.navigate("लक्ष्मी जी की आरती")
+                            }
+                        } else {
+                            navController.navigate("लक्ष्मी जी की आरती")
+                        }
                 }
             }, navController = navController)
         }
