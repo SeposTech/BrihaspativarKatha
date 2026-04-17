@@ -10,8 +10,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.spiritual.brihaspativarkatha.data.analytics.AdManager
+import com.spiritual.brihaspativarkatha.screen.AartiDetailScreen
 import com.spiritual.brihaspativarkatha.screen.AartiScreen
 import com.spiritual.brihaspativarkatha.screen.AboutUsScreen
+import com.spiritual.brihaspativarkatha.screen.DailyAartiScreen
 import com.spiritual.brihaspativarkatha.screen.HomeScreen
 import com.spiritual.brihaspativarkatha.screen.KathaMahattvaVidhiScreen
 import com.spiritual.brihaspativarkatha.screen.KathaScreen
@@ -34,7 +36,7 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
 
     NavHost(navController = navController, startDestination = "Splash") {
         composable(route = "Splash") {
-            SplashScreen(navController = navController,appUpdateManager)
+            SplashScreen(navController = navController, appUpdateManager)
         }
         composable(route = "Home") {
             HomeScreen(onTopicClick = { topic ->
@@ -50,6 +52,7 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
                             navController.navigate("katha")
                         }
                     }
+
                     "🪔 बृहस्पति देव की आरती" ->
                         if (AdManager.isAdReady()) {
                             AdManager.showAd {
@@ -78,6 +81,10 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
                         } else {
                             navController.navigate("लक्ष्मी जी की आरती")
                         }
+
+                    "🛕 दैनिक पूजा / आरती" -> {
+                        navController.navigate("दैनिक पूजा / आरती")
+                    }
                 }
             }, navController = navController)
         }
@@ -125,6 +132,27 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
 
         composable(route = "About") {
             AboutUsScreen(onBack = {
+                navController.popBackStack()
+            })
+        }
+
+        composable(route = "दैनिक पूजा / आरती") {
+            DailyAartiScreen(navController, onItemClick = {
+                if (AdManager.isAdReady()) {
+                    AdManager.showAd {
+                        navController.navigate("detail/$it")
+                    }
+                } else {
+                    navController.navigate("detail/$it")
+                }
+            }, onBack = {
+                navController.popBackStack()
+            })
+        }
+
+        composable("aartiDetail/{resId}") { backStackEntry ->
+            val resId = backStackEntry.arguments?.getString("resId")?.toInt() ?: 0
+            AartiDetailScreen(navController, resId, {
                 navController.popBackStack()
             })
         }

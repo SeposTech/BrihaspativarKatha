@@ -53,7 +53,8 @@ fun HomeScreen(onTopicClick: (String) -> Unit = {}, navController: NavController
         "📖 व्रत कथा",
         "🪔 बृहस्पति देव की आरती",
         "🌸 ओम जय जगदीश हरे आरती",
-        "💰 लक्ष्मी जी की आरती"
+        "💰 लक्ष्मी जी की आरती",
+        "🛕 दैनिक पूजा / आरती"
     )
 
     Scaffold(
@@ -105,8 +106,13 @@ fun HomeScreen(onTopicClick: (String) -> Unit = {}, navController: NavController
                 )
 
                 LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    contentPadding = PaddingValues(
+                        top = 12.dp,
+                        bottom = 60.dp // 👈 last item cut fix + banner ke liye space
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
                 ) {
                     items(topics) { topic ->
                         TopicCard(title = topic, onClick = { onTopicClick(topic) })
