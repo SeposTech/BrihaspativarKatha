@@ -26,7 +26,7 @@ class AartiRepository {
             ),
 
             AartiModel(
-                "🌼 गुरुवार - बृहस्पति देव",
+                "🌼 गुरुवार - विष्णु जी",
                 resId = R.raw.vishnu_aarti
 
             ),
