@@ -64,4 +64,7 @@ object AdManager {
     fun isAdReady(): Boolean {
         return interstitialAd != null
     }
+
+
+
 }

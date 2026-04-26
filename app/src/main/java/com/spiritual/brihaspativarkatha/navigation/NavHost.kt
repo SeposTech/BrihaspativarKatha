@@ -3,7 +3,6 @@ package com.spiritual.brihaspativarkatha.navigation
 import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -83,7 +82,14 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
                         }
 
                     "🛕 दैनिक पूजा / आरती" -> {
-                        navController.navigate("दैनिक पूजा / आरती")
+                        if (AdManager.isAdReady()) {
+                            AdManager.showAd {
+                                navController.navigate("दैनिक पूजा / आरती")
+                            }
+                        } else {
+                            navController.navigate("दैनिक पूजा / आरती")
+                        }
+
                     }
                 }
             }, navController = navController)

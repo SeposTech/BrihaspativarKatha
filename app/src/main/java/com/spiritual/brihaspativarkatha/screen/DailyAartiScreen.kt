@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,12 +31,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.spiritual.brihaspativarkatha.ads.BannerAdView
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 import com.spiritual.brihaspativarkatha.viewmodel.AartiViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DailyAartiScreen(navController: NavController,onItemClick: (Int) -> Unit,viewModel: AartiViewModel = viewModel(),onBack: () -> Unit = {}) {
-
+    TrackScreenDailyAarti("DailyAartiScreen")
     val aartiList by viewModel.aartiList.collectAsState()
 
     Scaffold(
@@ -61,6 +64,12 @@ fun DailyAartiScreen(navController: NavController,onItemClick: (Int) -> Unit,vie
                         )
                     }
                 }
+            )
+        },
+        bottomBar = {
+            BannerAdView(
+                modifier = Modifier
+                    .fillMaxWidth()
             )
         }
     ) { paddingValues ->
@@ -144,4 +153,11 @@ fun AartiCardTopic(title: String, onClick: () -> Unit) {
         }
     }
 
+}
+
+@Composable
+fun TrackScreenDailyAarti(screenName: String) {
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.trackScreen(screenName)
+    }
 }

@@ -20,11 +20,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.spiritual.brihaspativarkatha.ads.BannerAdView
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AartiDetailScreen(navController: NavController, resId: Int,onBack: () -> Unit = {}) {
-
+fun AartiDetailScreen(navController: NavController, resId: Int, onBack: () -> Unit = {}) {
+    TrackScreenAartiDetails("AartiDetailScreen")
     val context = LocalContext.current
 
     val aartiText = remember {
@@ -55,6 +57,17 @@ fun AartiDetailScreen(navController: NavController, resId: Int,onBack: () -> Uni
                     }
                 }
             )
+        },
+        bottomBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding() // 🔥 Fix for home button overlap
+            ) {
+                BannerAdView(
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
     ) { padding ->
 
@@ -92,4 +105,11 @@ fun readRawText(context: Context, resId: Int): String {
     return context.resources.openRawResource(resId)
         .bufferedReader()
         .use { it.readText() }
+}
+
+@Composable
+fun TrackScreenAartiDetails(screenName: String) {
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.trackScreen(screenName)
+    }
 }

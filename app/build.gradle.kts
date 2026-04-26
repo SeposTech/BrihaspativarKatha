@@ -1,4 +1,3 @@
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -16,8 +15,8 @@ android {
         applicationId = "com.spiritual.brihaspativarkatha"
         minSdk = 24
         targetSdk = 36
-        versionCode = 9
-        versionName = "1.7"
+        versionCode = 10
+        versionName = "1.8"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -37,6 +36,11 @@ android {
                 "ADMOB_INTERSTITIAL_ID",
                 "\"${project.findProperty("ADMOB_INTERSTITIAL_DEBUG")}\""
             )
+            buildConfigField(
+                "String",
+                "ADMOB_BANNER_ID",
+                "\"${project.findProperty("ADMOB_BANNER_DEBUG")}\""
+            )
         }
         getByName("release") {
             isMinifyEnabled = true
@@ -45,6 +49,11 @@ android {
                 "String",
                 "ADMOB_INTERSTITIAL_ID",
                 "\"${project.findProperty("ADMOB_INTERSTITIAL_RELEASE")}\""
+            )
+            buildConfigField(
+                "String",
+                "ADMOB_BANNER_ID",
+                "\"${project.findProperty("ADMOB_BANNER_RELEASE")}\""
             )
 
             proguardFiles(

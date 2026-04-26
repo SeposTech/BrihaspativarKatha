@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.spiritual.brihaspativarkatha.ads.BannerAdView
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -104,29 +105,38 @@ fun AartiScreen(
         },
         bottomBar = {
             // Fixed footer bar (अब किसी भी device पर cut नहीं होगा)
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(
-                                Color(0xFFDAA520),
-                                Color(0xFFF7D36F)
+            Column {
+
+                BannerAdView(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(
+                                    Color(0xFFDAA520),
+                                    Color(0xFFF7D36F)
+                                )
                             )
                         )
+                        .padding(vertical = 12.dp)
+                        .navigationBarsPadding(), // ✅ Safe area fix
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "🔱 बोलो बृहस्पतिदेव भगवान की जय 🙏",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center
                     )
-                    .padding(vertical = 12.dp)
-                    .navigationBarsPadding(), // ✅ Safe area fix
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "🔱 बोलो बृहस्पतिदेव भगवान की जय 🙏",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    textAlign = TextAlign.Center
-                )
+                }
             }
+
         }
     ) { innerPadding ->
 
