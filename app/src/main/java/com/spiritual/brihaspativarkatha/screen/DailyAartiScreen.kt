@@ -67,10 +67,15 @@ fun DailyAartiScreen(navController: NavController,onItemClick: (Int) -> Unit,vie
             )
         },
         bottomBar = {
-            BannerAdView(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-            )
+                    .navigationBarsPadding() // 🔥 Fix for home button overlap
+            ) {
+                BannerAdView(
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
     ) { paddingValues ->
 
