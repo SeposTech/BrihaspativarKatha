@@ -1,6 +1,8 @@
 package com.spiritual.brihaspativarkatha.screen
 
 import android.app.Activity
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,6 +24,7 @@ import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
+import com.spiritual.brihaspativarkatha.util.NetworkChangeReceiver
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
 
@@ -85,53 +88,56 @@ fun SplashScreen(navController: NavController, appUpdateManager: AppUpdateManage
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.radialGradient(
-                    colors = listOf(
-                        Color(0xFFFFF8E1),
-                        Color(0xFFFFD54F),
-                        Color(0xFFF9A825)
-                    ),
-                    radius = 800f
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.radialGradient(
+                        colors = listOf(
+                            Color(0xFFFFF8E1),
+                            Color(0xFFFFD54F),
+                            Color(0xFFF9A825)
+                        ),
+                        radius = 800f
+                    )
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+                Text(
+                    text = "🕉️",
+                    fontSize = (100 * animatedScale).sp,
+                    color = Color(0xFFB8860B),
+                    modifier = Modifier.scale(animatedScale)
                 )
-            ),
-        contentAlignment = Alignment.Center
-    ) {
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = "🕉️",
-                fontSize = (100 * animatedScale).sp,
-                color = Color(0xFFB8860B),
-                modifier = Modifier.scale(animatedScale)
-            )
+                Text(
+                    text = "बृहस्पतिवार व्रत कथा",
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF4A2800),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.alpha(animatedAlpha)
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-            Text(
-                text = "बृहस्पतिवार व्रत कथा",
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF4A2800),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.alpha(animatedAlpha)
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = "भगवान बृहस्पति की कृपा आप पर बनी रहे 🌼",
-                fontSize = 16.sp,
-                color = Color(0xFF6D4C41),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.alpha(animatedAlpha)
-            )
+                Text(
+                    text = "भगवान बृहस्पति की कृपा आप पर बनी रहे 🌼",
+                    fontSize = 16.sp,
+                    color = Color(0xFF6D4C41),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.alpha(animatedAlpha)
+                )
+            }
         }
-    }
+
+
+
 }
 
 @Composable
