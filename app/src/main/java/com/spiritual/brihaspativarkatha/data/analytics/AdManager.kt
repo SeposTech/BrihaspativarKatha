@@ -2,13 +2,13 @@ package com.spiritual.brihaspativarkatha.data.analytics
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.util.Log
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.spiritual.brihaspativarkatha.BuildConfig
+import com.spiritual.brihaspativarkatha.util.AppLog
 
 @SuppressLint("StaticFieldLeak")
 object AdManager {
@@ -30,12 +30,12 @@ object AdManager {
                 adRequest,
                 object : InterstitialAdLoadCallback() {
                     override fun onAdLoaded(ad: InterstitialAd) {
-                        Log.d("AD_TEST", "Ad Loaded Successfully")
+                        AppLog.d("Ad Loaded Successfully")
                         interstitialAd = ad
                     }
 
                     override fun onAdFailedToLoad(error: LoadAdError) {
-                        Log.e("AD_TEST", "Ad Failed: ${error.message}")
+                        AppLog.e("Ad Failed: ${error.message}")
                         interstitialAd = null
                     }
                 }
@@ -56,7 +56,7 @@ object AdManager {
 
             interstitialAd?.show(activity!!)
         } else {
-            Log.e("AD_TEST", "Ad NULL ❌")
+            AppLog.e("Ad NULL ❌")
             onAdClosed()
         }
     }

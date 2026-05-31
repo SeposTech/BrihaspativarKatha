@@ -31,6 +31,7 @@ android {
 
     buildTypes {
         getByName("debug") {
+            buildConfigField("Boolean", "LOG_ENABLED", "true")
             buildConfigField(
                 "String",
                 "ADMOB_INTERSTITIAL_ID",
@@ -43,7 +44,9 @@ android {
             )
         }
         getByName("release") {
+            buildConfigField("Boolean", "LOG_ENABLED", "false")
             isMinifyEnabled = true
+            isShrinkResources = true
             signingConfig = signingConfigs.getByName("release")
             buildConfigField(
                 "String",
