@@ -3,12 +3,14 @@ package com.spiritual.brihaspativarkatha.navigation
 import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.spiritual.brihaspativarkatha.data.analytics.AdManager
+import com.spiritual.brihaspativarkatha.data.analytics.InAppReviewManager
 import com.spiritual.brihaspativarkatha.screen.AartiDetailScreen
 import com.spiritual.brihaspativarkatha.screen.AartiScreen
 import com.spiritual.brihaspativarkatha.screen.AboutUsScreen
@@ -38,6 +40,26 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
             SplashScreen(navController = navController, appUpdateManager)
         }
         composable(route = "Home") {
+            val reviewManager = remember {
+                InAppReviewManager(context)
+            }
+            val showReview = navController
+                .currentBackStackEntry
+                ?.savedStateHandle
+                ?.get<Boolean>("show_review") ?: false
+
+            LaunchedEffect(showReview) {
+
+                if (showReview) {
+
+                    reviewManager.launchReviewFlow(activity)
+
+                    navController.currentBackStackEntry
+                        ?.savedStateHandle
+                        ?.remove<Boolean>("show_review")
+                }
+            }
+
             HomeScreen(onTopicClick = { topic ->
                 when (topic) {
                     "🌼 बृहस्पतिवार व्रत का महत्व" -> navController.navigate("mahattva")
@@ -108,6 +130,10 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
 
         composable(route = "katha") {
             KathaScreen(onBack = {
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("show_review", true)
+
                 navController.popBackStack()
             })
         }
@@ -116,7 +142,13 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
             AartiScreen(
                 title = "बृहस्पति देव की आरती",
                 aartiText = brihaspatiAartiText,
-                onBack = { navController.popBackStack() }
+                onBack = {
+                    navController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set("show_review", true)
+
+                    navController.popBackStack()
+                }
             )
         }
 
