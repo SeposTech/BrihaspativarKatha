@@ -99,6 +99,7 @@ dependencies {
     implementation(libs.google.ads)
     implementation(libs.play.review)
     implementation(libs.play.review.ktx)
+    implementation(libs.work.runtime)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

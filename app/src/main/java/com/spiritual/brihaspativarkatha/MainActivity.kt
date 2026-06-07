@@ -14,6 +14,7 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.spiritual.brihaspativarkatha.navigation.Navigation
 import com.spiritual.brihaspativarkatha.screen.NoInternetScreen
 import com.spiritual.brihaspativarkatha.util.NetworkChangeReceiver
+import com.spiritual.brihaspativarkatha.worker.AartiScheduler
 
 class MainActivity : ComponentActivity() {
     lateinit var appUpdateManager: AppUpdateManager
@@ -23,6 +24,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        AartiScheduler().schedule(this)
+        handleDeepLink()
         appUpdateManager = AppUpdateManagerFactory.create(this)
         networkChangeReceiver = NetworkChangeReceiver { connected ->
             isConnected = connected
@@ -46,6 +49,19 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
+        }
+    }
+
+    private fun handleDeepLink() {
+
+        val link = intent.getStringExtra("deep_link")
+
+        when (link) {
+
+            "app://shiv" -> {}
+            "app://hanuman" -> {}
+            "app://ganesh" -> {}
+            "app://guru" -> {}
         }
     }
 }
