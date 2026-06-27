@@ -29,6 +29,7 @@ import com.spiritual.brihaspativarkatha.R
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 import com.spiritual.brihaspativarkatha.util.formatTime
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +64,7 @@ fun KathaScreen(onBack: () -> Unit = {}) {
                 scrollState.scrollBy(0.8f)
             }
 
-            delay(70)
+            delay(50.milliseconds)
         }
     }
 
