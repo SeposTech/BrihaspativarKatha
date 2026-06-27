@@ -1,6 +1,7 @@
 package com.spiritual.brihaspativarkatha.screen
 
 import android.app.Activity
+import android.media.MediaPlayer
 import android.view.WindowManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.scrollBy
@@ -18,11 +19,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.TextStyle
+import com.spiritual.brihaspativarkatha.R
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
+import com.spiritual.brihaspativarkatha.util.formatTime
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,6 +41,10 @@ fun KathaScreen(onBack: () -> Unit = {}) {
     val kathaText = remember { brihaspativarKatha }
 
     var isScrolling by remember { mutableStateOf(false) }
+    var isPlayingAudio by remember { mutableStateOf(false) }
+    var currentPosition by remember { mutableIntStateOf(0) }
+    var duration by remember { mutableIntStateOf(0) }
+
 
     // 🔒 Keep screen ON while reading
     DisposableEffect(Unit) {
@@ -46,14 +55,15 @@ fun KathaScreen(onBack: () -> Unit = {}) {
     }
 
     // 🔄 Auto Scroll Effect
-    LaunchedEffect(isScrolling) {
-        if (isScrolling) {
-            while (isScrolling) {
-                if (scrollState.value < scrollState.maxValue) {
-                    scrollState.scrollBy(2f) // 👈 Adjust scroll speed
-                }
-                delay(50) // 👈 Adjust delay (lower = faster)
+    LaunchedEffect(isPlayingAudio) {
+
+        while (isPlayingAudio) {
+
+            if (scrollState.value < scrollState.maxValue) {
+                scrollState.scrollBy(0.8f)
             }
+
+            delay(70)
         }
     }
 
@@ -70,39 +80,27 @@ fun KathaScreen(onBack: () -> Unit = {}) {
                         )
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFDAA520)),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(0xFFDAA520)
+                ),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
                             Icons.Default.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = null,
                             tint = Color.White
                         )
                     }
                 }
             )
         },
-        floatingActionButton = {
-            Row(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                FloatingActionButton(
-                    containerColor = Color(0xFF4CAF50),
-                    onClick = { isScrolling = true }
-                ) {
-                    Icon(Icons.Filled.PlayArrow, contentDescription = "Start", tint = Color.White)
-                }
 
-                FloatingActionButton(
-                    containerColor = Color(0xFFFF9800),
-                    onClick = { isScrolling = false }
-                ) {
-                    Icon(Icons.Filled.Pause, contentDescription = "Pause", tint = Color.White)
-                }
-            }
+        // 👇 ADD THIS
+        bottomBar = {
+            KathaAudioPlayer(
+                onPlay = { isPlayingAudio = true },
+                onPause = { isPlayingAudio = false }
+            )
         }
     ) { padding ->
         Box(
@@ -121,17 +119,33 @@ fun KathaScreen(onBack: () -> Unit = {}) {
         ) {
             Column(
                 modifier = Modifier
-                    .padding(20.dp)
+                    .fillMaxSize()
                     .verticalScroll(scrollState)
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .padding(
+                        start = 20.dp,
+                        end = 20.dp,
+                        top = 12.dp,      // 👈 add karo
+                        bottom = 110.dp
+                    )
             ) {
                 Text(
                     text = kathaText,
-                    color = Color(0xFF3E2723),
-                    fontSize = 19.sp,
-                    lineHeight = 28.sp,
-                    fontWeight = FontWeight.Medium,
+
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+
+                    color = Color(0xFF4E342E),
+
+                    fontSize = 24.sp,
+
+                    lineHeight = 38.sp,
+
+                    textAlign = TextAlign.Start,
+
+                    fontFamily = FontFamily.Serif,
+
+                    letterSpacing = 0.3.sp
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -216,6 +230,160 @@ private val brihaspativarKatha = """
 fun TrackScreenKath(screenName: String) {
     LaunchedEffect(Unit) {
         AnalyticsHelper.trackScreen(screenName)
+    }
+}
+
+
+@Composable
+fun KathaAudioPlayer(
+    onPlay: () -> Unit,
+    onPause: () -> Unit
+) {
+
+    val context = LocalContext.current
+
+    val mediaPlayer = remember {
+        MediaPlayer.create(
+            context,
+            R.raw.brihaspativar_katha_audio
+        )
+    }
+
+    var isPlaying by remember { mutableStateOf(false) }
+    var currentPosition by remember { mutableIntStateOf(0) }
+
+    val duration = remember {
+        mediaPlayer.duration
+    }
+
+    LaunchedEffect(isPlaying) {
+        while (isPlaying) {
+            currentPosition = mediaPlayer.currentPosition
+            delay(500)
+        }
+    }
+
+    DisposableEffect(Unit) {
+
+        mediaPlayer.setOnCompletionListener {
+            isPlaying = false
+            currentPosition = 0
+            onPause()
+        }
+
+        onDispose {
+            mediaPlayer.release()
+        }
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+        elevation = CardDefaults.cardElevation(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        )
+    ) {
+
+        Column(
+            modifier = Modifier.padding(12.dp)
+        ) {
+
+            Text(
+                text = "🎧 बृहस्पतिवार व्रत कथा",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFDAA520)
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Slider(
+                value = currentPosition.toFloat(),
+                onValueChange = {
+                    currentPosition = it.toInt()
+                    mediaPlayer.seekTo(it.toInt())
+                },
+                valueRange = 0f..duration.toFloat()
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Text(
+                    text = formatTime(currentPosition),
+                    fontSize = 12.sp
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    IconButton(
+                        onClick = {
+                            mediaPlayer.seekTo(
+                                (mediaPlayer.currentPosition - 10000)
+                                    .coerceAtLeast(0)
+                            )
+                        }
+                    ) {
+                        Text("⏪")
+                    }
+
+                    FilledIconButton(
+                        onClick = {
+
+                            if (mediaPlayer.isPlaying) {
+
+                                mediaPlayer.pause()
+                                isPlaying = false
+                                onPause()
+
+                            } else {
+
+                                // First time play hone par 4 sec skip
+                                if (mediaPlayer.currentPosition == 0) {
+                                    mediaPlayer.seekTo(4000)
+                                }
+
+                                mediaPlayer.start()
+                                isPlaying = true
+                                onPlay()
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = if (isPlaying)
+                                Icons.Default.Pause
+                            else
+                                Icons.Default.PlayArrow,
+                            contentDescription = null
+                        )
+                    }
+
+                    IconButton(
+                        onClick = {
+                            mediaPlayer.seekTo(
+                                (mediaPlayer.currentPosition + 10000)
+                                    .coerceAtMost(duration)
+                            )
+                        }
+                    ) {
+                        Text("⏩")
+                    }
+                }
+
+                Text(
+                    text = formatTime(duration),
+                    fontSize = 12.sp
+                )
+            }
+        }
     }
 }
 
