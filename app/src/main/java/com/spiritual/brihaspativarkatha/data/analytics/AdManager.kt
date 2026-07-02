@@ -35,7 +35,10 @@ object AdManager {
                     }
 
                     override fun onAdFailedToLoad(error: LoadAdError) {
-                        AppLog.e("Ad Failed: ${error.message}")
+                        AppLog.e(
+                            "Ad Failed to load: [code=${error.code}] ${error.message}",
+                            Exception("AdMob load error code=${error.code}: ${error.message}")
+                        )
                         interstitialAd = null
                     }
                 }

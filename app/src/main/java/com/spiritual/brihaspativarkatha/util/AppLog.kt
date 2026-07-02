@@ -1,9 +1,10 @@
 package com.spiritual.brihaspativarkatha.util
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.spiritual.brihaspativarkatha.BuildConfig
 
 object AppLog {
-    private const val TAG = "InAppReview"
+    private const val TAG = "BrihaspativarApp"
 
     fun d(message: String) {
         if (BuildConfig.DEBUG) {
@@ -17,9 +18,18 @@ object AppLog {
         }
     }
 
-    fun e(message: String) {
+    fun e(message: String, throwable: Throwable? = null) {
         if (BuildConfig.DEBUG) {
-            android.util.Log.e(TAG, message)
+            android.util.Log.e(TAG, message, throwable)
+        } else {
+            // Report to Crashlytics in release builds
+            val crashlytics = FirebaseCrashlytics.getInstance()
+            crashlytics.log(message)
+            if (throwable != null) {
+                crashlytics.recordException(throwable)
+            } else {
+                crashlytics.recordException(Exception(message))
+            }
         }
     }
 }

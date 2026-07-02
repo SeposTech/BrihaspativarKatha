@@ -39,7 +39,8 @@ class InAppReviewManager(
                 } else {
 
                     AppLog.e(
-                        "requestReviewFlow FAILED ${request.exception?.message}"
+                        "requestReviewFlow FAILED ${request.exception?.message}",
+                        request.exception
                     )
                 }
             }
