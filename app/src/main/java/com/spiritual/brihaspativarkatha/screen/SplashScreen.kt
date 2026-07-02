@@ -1,8 +1,6 @@
 package com.spiritual.brihaspativarkatha.screen
 
 import android.app.Activity
-import android.content.IntentFilter
-import android.net.ConnectivityManager
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -25,7 +23,6 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsEvents
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
-import com.spiritual.brihaspativarkatha.util.NetworkChangeReceiver
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
 
