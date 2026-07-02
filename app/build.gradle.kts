@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -15,8 +16,8 @@ android {
         applicationId = "com.spiritual.brihaspativarkatha"
         minSdk = 24
         targetSdk = 36
-        versionCode = 12
-        versionName = "2.0"
+        versionCode = 13
+        versionName = "2.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -94,6 +95,7 @@ dependencies {
     implementation(libs.coroutines.play.services)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.google.ads)
