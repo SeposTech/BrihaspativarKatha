@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spiritual.brihaspativarkatha.ads.BannerAdView
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsEvents
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,6 +37,12 @@ fun AartiScreen(
     onBack: () -> Unit = {}
 ) {
     TrackScreenAarti("AartiScreen - $title")
+    LaunchedEffect(title) {
+        AnalyticsHelper.logEvent(
+            AnalyticsEvents.AARTI_OPEN,
+            mapOf("aarti_title" to title)
+        )
+    }
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
     val scrollState = rememberScrollState()
@@ -86,6 +93,10 @@ fun AartiScreen(
 
                 FloatingActionButton(
                     onClick = {
+                        AnalyticsHelper.logEvent(
+                            AnalyticsEvents.SHARE_CLICK,
+                            mapOf("source" to "aarti_screen", "aarti_title" to title)
+                        )
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "text/plain"
                             putExtra(Intent.EXTRA_SUBJECT, title)

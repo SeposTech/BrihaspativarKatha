@@ -21,12 +21,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.spiritual.brihaspativarkatha.ads.BannerAdView
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsEvents
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AartiDetailScreen(navController: NavController, resId: Int, onBack: () -> Unit = {}) {
     TrackScreenAartiDetails("AartiDetailScreen")
+    LaunchedEffect(resId) {
+        AnalyticsHelper.logEvent(
+            AnalyticsEvents.AARTI_OPEN,
+            mapOf("source" to "daily_aarti_detail", "res_id" to resId.toString())
+        )
+    }
     val context = LocalContext.current
 
     val aartiText = remember {

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.spiritual.brihaspativarkatha.data.analytics.AdManager
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsEvents
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -229,6 +230,10 @@ fun openPlayStoreForRating(context: Context) {
 
 // 🔹 Function to Share App
 fun shareApp(context: Context) {
+    AnalyticsHelper.logEvent(
+        AnalyticsEvents.SHARE_CLICK,
+        mapOf("source" to "home_footer")
+    )
     val appPackageName = context.packageName
     val shareIntent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"

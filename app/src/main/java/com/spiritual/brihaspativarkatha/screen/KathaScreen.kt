@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spiritual.brihaspativarkatha.R
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsEvents
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 import com.spiritual.brihaspativarkatha.util.formatTime
 import kotlinx.coroutines.delay
@@ -35,6 +36,12 @@ import kotlin.time.Duration.Companion.milliseconds
 @Composable
 fun KathaScreen(onBack: () -> Unit = {}) {
     TrackScreenKath("KathScreen")
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.logEvent(
+            AnalyticsEvents.KATHA_OPEN,
+            mapOf("screen" to "katha_screen")
+        )
+    }
     val context = LocalContext.current
     val activity = context as? Activity
     val scrollState = rememberScrollState()
@@ -269,6 +276,10 @@ fun KathaAudioPlayer(
         mediaPlayer.setOnCompletionListener {
             isPlaying = false
             currentPosition = 0
+            AnalyticsHelper.logEvent(
+                AnalyticsEvents.AUDIO_COMPLETE,
+                mapOf("audio_name" to "brihaspativar_katha")
+            )
             onPause()
         }
 
@@ -354,6 +365,10 @@ fun KathaAudioPlayer(
 
                                 mediaPlayer.start()
                                 isPlaying = true
+                                AnalyticsHelper.logEvent(
+                                    AnalyticsEvents.AUDIO_PLAY,
+                                    mapOf("audio_name" to "brihaspativar_katha")
+                                )
                                 onPlay()
                             }
                         }
