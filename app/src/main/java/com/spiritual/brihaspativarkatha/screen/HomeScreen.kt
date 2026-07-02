@@ -54,7 +54,8 @@ fun HomeScreen(onTopicClick: (String) -> Unit = {}, navController: NavController
         "🪔 बृहस्पति देव की आरती",
         "🌸 ओम जय जगदीश हरे आरती",
         "💰 लक्ष्मी जी की आरती",
-        "🛕 दैनिक पूजा / आरती"
+        "🛕 दैनिक पूजा / आरती",
+        "🗓️ पंचांग"
     )
 
     Scaffold(
@@ -238,7 +239,6 @@ fun shareApp(context: Context) {
     }
     context.startActivity(Intent.createChooser(shareIntent, "Share App"))
 }
-
 
 
 @Preview(showBackground = true)

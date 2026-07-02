@@ -19,6 +19,7 @@ import com.spiritual.brihaspativarkatha.screen.HomeScreen
 import com.spiritual.brihaspativarkatha.screen.KathaMahattvaVidhiScreen
 import com.spiritual.brihaspativarkatha.screen.KathaScreen
 import com.spiritual.brihaspativarkatha.screen.KathaVidhiScreen
+import com.spiritual.brihaspativarkatha.screen.PanchangScreen
 import com.spiritual.brihaspativarkatha.screen.SplashScreen
 import com.spiritual.brihaspativarkatha.screen.brihaspatiAartiText
 import com.spiritual.brihaspativarkatha.screen.jagdishAartiText
@@ -113,6 +114,8 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
                         }
 
                     }
+
+                    "🗓️ पंचांग" -> navController.navigate("Panchang")
                 }
             }, navController = navController)
         }
@@ -174,6 +177,12 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
             })
         }
 
+        composable(route = "Panchang") {
+            PanchangScreen(onBackPress = {
+                navController.popBackStack()
+            })
+        }
+
         composable(route = "दैनिक पूजा / आरती") {
             DailyAartiScreen(navController, onItemClick = {
                 if (AdManager.isAdReady()) {
@@ -194,5 +203,7 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
                 navController.popBackStack()
             })
         }
+
+
     }
 }
