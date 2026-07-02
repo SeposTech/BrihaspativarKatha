@@ -14,5 +14,11 @@ object AnalyticsEvents {
     const val PANCHANG_OPEN = "panchang_open"
     const val ABOUT_OPEN = "about_open"
     const val SHARE_CLICK = "share_click"
+
+    const val KATHA_VIDHI_SCREEN = "KathaVidhiScreen"
+
+    const val NO_INTERNET_SCREEN = "NoInternetScreen"
+
+    const val SPLASH_SCREEN_OPEN = "splash_screen_open"
 }
 

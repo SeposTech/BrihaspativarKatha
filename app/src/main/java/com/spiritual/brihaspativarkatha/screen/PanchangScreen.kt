@@ -84,6 +84,7 @@ private val hindiFestivals = listOf(
 fun PanchangScreen(
     onBackPress: () -> Unit
 ) {
+    TrackScreenKathMahattva("PanchangScreen")
     LaunchedEffect(Unit) {
         AnalyticsHelper.logEvent(
             AnalyticsEvents.PANCHANG_OPEN,

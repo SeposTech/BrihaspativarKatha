@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsEvents
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 import com.spiritual.brihaspativarkatha.util.NetworkChangeReceiver
 import kotlinx.coroutines.delay
@@ -31,6 +32,12 @@ import kotlinx.coroutines.tasks.await
 @Composable
 fun SplashScreen(navController: NavController, appUpdateManager: AppUpdateManager) {
     TrackScreen("SplashScreen")
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.logEvent(
+            AnalyticsEvents.SPLASH_SCREEN_OPEN,
+            mapOf("screen" to "splash_screen")
+        )
+    }
     val context = LocalContext.current
     val activity = context as? Activity
 
@@ -88,54 +95,53 @@ fun SplashScreen(navController: NavController, appUpdateManager: AppUpdateManage
         }
     }
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.radialGradient(
-                        colors = listOf(
-                            Color(0xFFFFF8E1),
-                            Color(0xFFFFD54F),
-                            Color(0xFFF9A825)
-                        ),
-                        radius = 800f
-                    )
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
-                Text(
-                    text = "🕉️",
-                    fontSize = (100 * animatedScale).sp,
-                    color = Color(0xFFB8860B),
-                    modifier = Modifier.scale(animatedScale)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.radialGradient(
+                    colors = listOf(
+                        Color(0xFFFFF8E1),
+                        Color(0xFFFFD54F),
+                        Color(0xFFF9A825)
+                    ),
+                    radius = 800f
                 )
+            ),
+        contentAlignment = Alignment.Center
+    ) {
 
-                Spacer(modifier = Modifier.height(16.dp))
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-                Text(
-                    text = "बृहस्पतिवार व्रत कथा",
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF4A2800),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.alpha(animatedAlpha)
-                )
+            Text(
+                text = "🕉️",
+                fontSize = (100 * animatedScale).sp,
+                color = Color(0xFFB8860B),
+                modifier = Modifier.scale(animatedScale)
+            )
 
-                Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-                Text(
-                    text = "भगवान बृहस्पति की कृपा आप पर बनी रहे 🌼",
-                    fontSize = 16.sp,
-                    color = Color(0xFF6D4C41),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.alpha(animatedAlpha)
-                )
-            }
+            Text(
+                text = "बृहस्पतिवार व्रत कथा",
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF4A2800),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.alpha(animatedAlpha)
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = "भगवान बृहस्पति की कृपा आप पर बनी रहे 🌼",
+                fontSize = 16.sp,
+                color = Color(0xFF6D4C41),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.alpha(animatedAlpha)
+            )
         }
-
+    }
 
 
 }
