@@ -45,6 +45,7 @@ fun KathaScreen(onBack: () -> Unit = {}) {
     val context = LocalContext.current
     val activity = context as? Activity
     val scrollState = rememberScrollState()
+    val screenStartTimeMs = remember { System.currentTimeMillis() }
     val coroutineScope = rememberCoroutineScope()
     val kathaText = remember { brihaspativarKatha }
 
@@ -52,6 +53,22 @@ fun KathaScreen(onBack: () -> Unit = {}) {
     var isPlayingAudio by remember { mutableStateOf(false) }
     var currentPosition by remember { mutableIntStateOf(0) }
     var duration by remember { mutableIntStateOf(0) }
+
+    DisposableEffect(screenStartTimeMs) {
+        onDispose {
+            val timeSpentMs = (System.currentTimeMillis() - screenStartTimeMs).coerceAtLeast(0L)
+            val timeSpentSeconds = timeSpentMs / 1000
+
+            AnalyticsHelper.logEvent(
+                AnalyticsEvents.KATHA_TIME_SPENT,
+                mapOf(
+                    "screen" to "katha_screen",
+                    "time_spent_sec" to timeSpentSeconds.toString(),
+                    "time_spent_ms" to timeSpentMs.toString()
+                )
+            )
+        }
+    }
 
 
     // 🔒 Keep screen ON while reading
@@ -259,9 +276,39 @@ fun KathaAudioPlayer(
 
     var isPlaying by remember { mutableStateOf(false) }
     var currentPosition by remember { mutableIntStateOf(0) }
+    var playStartTimeMs by remember { mutableStateOf<Long?>(null) }
+    var totalListenedMs by remember { mutableStateOf(0L) }
 
     val duration = remember {
         mediaPlayer.duration
+    }
+
+    fun trackAudioStop(reason: String) {
+        val nowMs = System.currentTimeMillis()
+        val sessionListenedMs = playStartTimeMs
+            ?.let { (nowMs - it).coerceAtLeast(0L) }
+            ?: 0L
+
+        if (sessionListenedMs == 0L && totalListenedMs == 0L) {
+            playStartTimeMs = null
+            return
+        }
+
+        totalListenedMs += sessionListenedMs
+        playStartTimeMs = null
+
+        val params = mapOf(
+            "audio_name" to "brihaspativar_katha",
+            "reason" to reason,
+            "session_listen_ms" to sessionListenedMs.toString(),
+            "session_listen_sec" to (sessionListenedMs / 1000).toString(),
+            "total_listen_ms" to totalListenedMs.toString(),
+            "total_listen_sec" to (totalListenedMs / 1000).toString(),
+            "current_position_ms" to mediaPlayer.currentPosition.toString()
+        )
+
+        AnalyticsHelper.logEvent(AnalyticsEvents.AUDIO_STOP, params)
+        AnalyticsHelper.logEvent(AnalyticsEvents.AUDIO_LISTEN_TIME, params)
     }
 
     LaunchedEffect(isPlaying) {
@@ -276,6 +323,7 @@ fun KathaAudioPlayer(
         mediaPlayer.setOnCompletionListener {
             isPlaying = false
             currentPosition = 0
+            trackAudioStop(reason = "complete")
             AnalyticsHelper.logEvent(
                 AnalyticsEvents.AUDIO_COMPLETE,
                 mapOf("audio_name" to "brihaspativar_katha")
@@ -284,6 +332,9 @@ fun KathaAudioPlayer(
         }
 
         onDispose {
+            if (mediaPlayer.isPlaying) {
+                trackAudioStop(reason = "screen_exit")
+            }
             mediaPlayer.release()
         }
     }
@@ -365,11 +416,18 @@ fun KathaAudioPlayer(
 
                                 mediaPlayer.start()
                                 isPlaying = true
+                                playStartTimeMs = System.currentTimeMillis()
                                 AnalyticsHelper.logEvent(
                                     AnalyticsEvents.AUDIO_PLAY,
-                                    mapOf("audio_name" to "brihaspativar_katha")
+                                    mapOf(
+                                        "audio_name" to "brihaspativar_katha",
+                                        "start_position_ms" to mediaPlayer.currentPosition.toString()
+                                    )
                                 )
                                 onPlay()
+                            }
+                            if (!mediaPlayer.isPlaying && isPlaying.not()) {
+                                trackAudioStop(reason = "pause")
                             }
                         }
                     ) {

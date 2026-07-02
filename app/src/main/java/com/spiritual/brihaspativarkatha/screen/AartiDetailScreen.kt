@@ -27,7 +27,7 @@ import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AartiDetailScreen(navController: NavController, resId: Int, onBack: () -> Unit = {}) {
-    TrackScreenAartiDetails("AartiDetailScreen")
+    TrackScreenAartiDetails("AartiDetailScreen-$resId")
     LaunchedEffect(resId) {
         AnalyticsHelper.logEvent(
             AnalyticsEvents.AARTI_OPEN,
@@ -116,7 +116,7 @@ fun readRawText(context: Context, resId: Int): String {
 
 @Composable
 fun TrackScreenAartiDetails(screenName: String) {
-    LaunchedEffect(Unit) {
+    LaunchedEffect(screenName) {
         AnalyticsHelper.trackScreen(screenName)
     }
 }

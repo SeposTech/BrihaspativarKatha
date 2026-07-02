@@ -23,12 +23,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spiritual.brihaspativarkatha.R
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsEvents
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutUsScreen(onBack: () -> Unit = {}) {
     TrackScreenAboutUs("AboutUsScreen")
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.logEvent(
+            AnalyticsEvents.ABOUT_OPEN,
+            mapOf("screen" to "about_us_screen")
+        )
+    }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -168,7 +175,7 @@ fun AboutUsScreen(onBack: () -> Unit = {}) {
 
 @Composable
 fun TrackScreenAboutUs(screenName: String) {
-    LaunchedEffect(Unit) {
+    LaunchedEffect(screenName) {
         AnalyticsHelper.trackScreen(screenName)
     }
 }

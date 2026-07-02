@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.spiritual.brihaspativarkatha.ads.BannerAdView
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsEvents
 import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 import com.spiritual.brihaspativarkatha.viewmodel.AartiViewModel
 
@@ -39,6 +40,12 @@ import com.spiritual.brihaspativarkatha.viewmodel.AartiViewModel
 @Composable
 fun DailyAartiScreen(navController: NavController,onItemClick: (Int) -> Unit,viewModel: AartiViewModel = viewModel(),onBack: () -> Unit = {}) {
     TrackScreenDailyAarti("DailyAartiScreen")
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.logEvent(
+            AnalyticsEvents.DAILY_AARTI_OPEN,
+            mapOf("screen" to "daily_aarti_screen")
+        )
+    }
     val aartiList by viewModel.aartiList.collectAsState()
 
     Scaffold(
@@ -162,7 +169,7 @@ fun AartiCardTopic(title: String, onClick: () -> Unit) {
 
 @Composable
 fun TrackScreenDailyAarti(screenName: String) {
-    LaunchedEffect(Unit) {
+    LaunchedEffect(screenName) {
         AnalyticsHelper.trackScreen(screenName)
     }
 }

@@ -115,7 +115,15 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
 
                     }
 
-                    "🗓️ पंचांग" -> navController.navigate("Panchang")
+                    "🗓️ पंचांग" -> {
+                        if (AdManager.isAdReady()) {
+                            AdManager.showAd {
+                                navController.navigate("Panchang")
+                            }
+                        } else {
+                            navController.navigate("Panchang")
+                        }
+                    }
                 }
             }, navController = navController)
         }

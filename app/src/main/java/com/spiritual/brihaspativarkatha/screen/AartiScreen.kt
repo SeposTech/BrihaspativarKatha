@@ -193,7 +193,7 @@ fun AartiScreen(
 
 @Composable
 fun TrackScreenAarti(screenName: String) {
-    LaunchedEffect(Unit) {
+    LaunchedEffect(screenName) {
         AnalyticsHelper.trackScreen(screenName)
     }
 }

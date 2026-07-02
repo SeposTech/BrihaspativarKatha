@@ -48,6 +48,12 @@ fun HomeScreen(onTopicClick: (String) -> Unit = {}, navController: NavController
         AdManager.loadAd()
     }
     TrackScreenHome("HomeScreen")
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.logEvent(
+            AnalyticsEvents.HOME_OPEN,
+            mapOf("screen" to "home_screen")
+        )
+    }
     val topics = listOf(
         "🌼 बृहस्पतिवार व्रत का महत्व",
         "🙏 व्रत विधि",
@@ -256,7 +262,7 @@ fun HomeScreenPreview() {
 
 @Composable
 fun TrackScreenHome(screenName: String) {
-    LaunchedEffect(Unit) {
+    LaunchedEffect(screenName) {
         AnalyticsHelper.trackScreen(screenName)
     }
 }
