@@ -33,6 +33,26 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3706611217753944~2761541696"/>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+
+            <meta-data
+                android:name="com.spiritual.brihaspativarkatha.application.AnalyticsInitializer"
+                android:value="androidx.startup" />
+
+            <meta-data
+                android:name="com.spiritual.brihaspativarkatha.application.AdMobInitializer"
+                android:value="androidx.startup" />
+
+            <meta-data
+                android:name="com.spiritual.brihaspativarkatha.application.CrashlyticsInitializer"
+                android:value="androidx.startup" />
+
+        </provider>
     </application>
 
 </manifest>

@@ -16,8 +16,8 @@ android {
         applicationId = "com.spiritual.brihaspativarkatha"
         minSdk = 24
         targetSdk = 36
-        versionCode = 14
-        versionName = "2.2"
+        versionCode = 15
+        versionName = "2.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -102,6 +102,7 @@ dependencies {
     implementation(libs.play.review)
     implementation(libs.play.review.ktx)
     implementation(libs.work.runtime)
+    implementation(libs.androidx.startup.runtime)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
