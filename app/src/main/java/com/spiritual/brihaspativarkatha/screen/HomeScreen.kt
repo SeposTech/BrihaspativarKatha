@@ -62,6 +62,7 @@ fun HomeScreen(onTopicClick: (String) -> Unit = {}, navController: NavController
         "🌸 ओम जय जगदीश हरे आरती",
         "💰 लक्ष्मी जी की आरती",
         "🛕 दैनिक पूजा / आरती",
+        "🕉️ मंत्र जाप",
         "🗓️ पंचांग"
     )
 

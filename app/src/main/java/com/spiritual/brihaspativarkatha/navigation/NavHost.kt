@@ -19,6 +19,7 @@ import com.spiritual.brihaspativarkatha.screen.HomeScreen
 import com.spiritual.brihaspativarkatha.screen.KathaMahattvaVidhiScreen
 import com.spiritual.brihaspativarkatha.screen.KathaScreen
 import com.spiritual.brihaspativarkatha.screen.KathaVidhiScreen
+import com.spiritual.brihaspativarkatha.screen.MantraJaapScreen
 import com.spiritual.brihaspativarkatha.screen.PanchangScreen
 import com.spiritual.brihaspativarkatha.screen.SplashScreen
 import com.spiritual.brihaspativarkatha.screen.brihaspatiAartiText
@@ -115,6 +116,16 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
 
                     }
 
+                    "🕉️ मंत्र जाप" -> {
+                        if (AdManager.isAdReady()) {
+                            AdManager.showAd {
+                                navController.navigate("MantraJaap")
+                            }
+                        } else {
+                            navController.navigate("MantraJaap")
+                        }
+                    }
+
                     "🗓️ पंचांग" -> {
                         if (AdManager.isAdReady()) {
                             AdManager.showAd {
@@ -183,6 +194,24 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
             AboutUsScreen(onBack = {
                 navController.popBackStack()
             })
+        }
+
+        composable(route = "MantraJaap") {
+
+            MantraJaapScreen(
+                onBack = {
+                    navController.popBackStack()
+                },
+                onHistoryClick = {
+                    navController.navigate("JaapHistory")
+                },
+                onCountChanged = { count ->
+                    // Later: local storage me save karna
+                },
+                onTargetChanged = { target ->
+                    // Later: local storage me target save karna
+                }
+            )
         }
 
         composable(route = "Panchang") {
