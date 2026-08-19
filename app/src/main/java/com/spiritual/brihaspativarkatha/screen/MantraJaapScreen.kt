@@ -21,11 +21,16 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material3.AlertDialog
@@ -56,12 +61,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsEvents
+import com.spiritual.brihaspativarkatha.data.analytics.AnalyticsHelper
 import kotlin.math.roundToInt
 
 private val SpiritualBackground = Color(0xFFFFF8E8)
@@ -78,14 +86,15 @@ fun MantraJaapScreen(
     currentCount: Int = 0,
     initialTarget: Int = 108,
     onBack: () -> Unit = {},
-    onHistoryClick: () -> Unit = {},
     onCountChanged: (Int) -> Unit = {},
     onTargetChanged: (Int) -> Unit = {}
 ) {
 
+    TrackScreenHome("MantraJaapScreen")
     var count by remember { mutableIntStateOf(currentCount) }
     var target by remember { mutableIntStateOf(initialTarget) }
     var showCustomDialog by remember { mutableStateOf(false) }
+    var showCelebration by remember { mutableStateOf(false) }
 
     val haptic = LocalHapticFeedback.current
 
@@ -102,11 +111,24 @@ fun MantraJaapScreen(
     fun updateCount(newCount: Int) {
         count = newCount.coerceIn(0, target)
         onCountChanged(count)
+
+        if (target > 0 && count >= target) {
+            showCelebration = true
+        }
     }
 
     fun selectTarget(newTarget: Int) {
         target = newTarget
         count = 0
+        showCelebration = false
+
+        AnalyticsHelper.logEvent(
+            AnalyticsEvents.MANTRA_TARGET_SELECT,
+            mapOf(
+                "target" to newTarget.toString(),
+                "source" to "preset_chip"
+            )
+        )
 
         onTargetChanged(target)
         onCountChanged(count)
@@ -138,17 +160,6 @@ fun MantraJaapScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = SpiritualBrown
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(
-                        onClick = onHistoryClick
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.History,
-                            contentDescription = "Jaap History",
                             tint = SpiritualBrown
                         )
                     }
@@ -461,6 +472,15 @@ fun MantraJaapScreen(
                                         enabled = count < target
                                     ) {
 
+                                        AnalyticsHelper.logEvent(
+                                            AnalyticsEvents.MANTRA_COUNT_CLICK,
+                                            mapOf(
+                                                "target" to target.toString(),
+                                                "current_count" to count.toString(),
+                                                "source" to "main_button"
+                                            )
+                                        )
+
                                         haptic.performHapticFeedback(
                                             HapticFeedbackType.LongPress
                                         )
@@ -592,7 +612,7 @@ fun MantraJaapScreen(
                 // HISTORY BUTTON
                 // ---------------------------------------------------------
 
-                item {
+                /*item {
 
                     OutlinedButton(
                         onClick = onHistoryClick,
@@ -624,13 +644,13 @@ fun MantraJaapScreen(
                             fontWeight = FontWeight.SemiBold
                         )
                     }
-                }
+                }*/
 
                 // ---------------------------------------------------------
                 // LOCAL STORAGE NOTE
                 // ---------------------------------------------------------
 
-                item {
+                /*item {
 
                     Text(
                         text = "ⓘ आपकी जाप हिस्ट्री आपके डिवाइस पर सुरक्षित रखी जाती है।\nऐप uninstall या data clear करने पर history हट सकती है।",
@@ -642,7 +662,7 @@ fun MantraJaapScreen(
                         lineHeight = 17.sp,
                         color = SpiritualSecondary
                     )
-                }
+                }*/
             }
             }
         }
@@ -667,6 +687,113 @@ fun MantraJaapScreen(
             }
         )
     }
+
+    if (showCelebration) {
+
+        CelebrationOverlay(
+            onDismiss = {
+                showCelebration = false
+            }
+        )
+    }
+}
+
+@Composable
+private fun CelebrationOverlay(
+    onDismiss: () -> Unit
+) {
+
+    val transition = rememberInfiniteTransition(label = "celebration")
+
+    val pulseScale by transition.animateFloat(
+        initialValue = 0.96f,
+        targetValue = 1.05f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 900,
+                easing = FastOutSlowInEasing
+            ),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "pulseScale"
+    )
+
+    val glowAlpha by transition.animateFloat(
+        initialValue = 0.45f,
+        targetValue = 0.85f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 1100,
+                easing = FastOutSlowInEasing
+            ),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "glowAlpha"
+    )
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = SpiritualGold
+                )
+            ) {
+                Text("जय हो")
+            }
+        },
+        title = {
+            Text(
+                text = "जाप पूर्ण हुआ!",
+                fontWeight = FontWeight.Bold,
+                color = SpiritualBrown
+            )
+        },
+        text = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(72.dp)
+                        .graphicsLayer(
+                            scaleX = pulseScale,
+                            scaleY = pulseScale
+                        )
+                        .background(
+                            color = SpiritualGold.copy(alpha = glowAlpha),
+                            shape = CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "🙏",
+                        fontSize = 30.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                Spacer(
+                    modifier = Modifier.height(8.dp)
+                )
+
+                Text(
+                    text = "✨🎉",
+                    fontSize = 28.sp,
+                    textAlign = TextAlign.Center
+                )
+
+                Text(
+                    text = "आपका मंत्र जाप लक्ष्य पूरा हो गया है।",
+                    color = SpiritualSecondary,
+                    textAlign = TextAlign.Center
+                )
+            }
+        },
+        containerColor = SpiritualCard,
+        shape = RoundedCornerShape(24.dp)
+    )
 }
 
 

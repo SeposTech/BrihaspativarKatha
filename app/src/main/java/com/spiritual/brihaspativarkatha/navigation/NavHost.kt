@@ -202,9 +202,6 @@ fun Navigation(appUpdateManager: AppUpdateManager) {
                 onBack = {
                     navController.popBackStack()
                 },
-                onHistoryClick = {
-                    navController.navigate("JaapHistory")
-                },
                 onCountChanged = { count ->
                     // Later: local storage me save karna
                 },

@@ -14,6 +14,8 @@ object AnalyticsEvents {
     const val PANCHANG_OPEN = "panchang_open"
     const val ABOUT_OPEN = "about_open"
     const val SHARE_CLICK = "share_click"
+    const val MANTRA_TARGET_SELECT = "mantra_target_select"
+    const val MANTRA_COUNT_CLICK = "mantra_count_click"
 
     const val KATHA_VIDHI_SCREEN = "KathaVidhiScreen"
 
